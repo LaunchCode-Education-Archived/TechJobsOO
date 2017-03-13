@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TechJobs.Controllers
@@ -10,25 +7,12 @@ namespace TechJobs.Controllers
     {
         public IActionResult Index()
         {
-            return View();
-        }
+            Dictionary<string, string> actionChoices = new Dictionary<string, string>();
+            actionChoices.Add("search", "Search");
+            actionChoices.Add("list", "List");
+            
+            ViewBag.actions = actionChoices;
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
             return View();
         }
     }
