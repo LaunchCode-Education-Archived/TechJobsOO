@@ -16,7 +16,7 @@ namespace TechJobs.Controllers
         {
             List<Dictionary<string, string>> jobs;
 
-            if (searchType.Equals("all"))
+            if (searchType.Equals("all") || searchTerm.Equals(""))
             {
                 jobs = JobData.FindByValue(searchTerm);
             }
