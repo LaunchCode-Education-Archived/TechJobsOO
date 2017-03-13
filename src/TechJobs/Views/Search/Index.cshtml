@@ -31,8 +31,6 @@
 {
 
     <h3>@ViewBag.jobs.Count Result(s)</h3>
-    
-    int i = 0;
 
     @foreach (Dictionary<string, string> job in ViewBag.jobs)
     {
@@ -45,7 +43,5 @@
                 </tr>
             }
         </table>
-        
-            i++;
     }
 }
