@@ -1,10 +1,10 @@
 ﻿<h1>@ViewBag.title</h1>
 
 <table>
-@for (int i= 0; i < ViewBag.items.Count; i++)
+@foreach (string item in ViewBag.items)
 {
-    <tr class="@( i % 2 == 0 ? "even" : "odd" ) ">
-        <td><a asp-controller="List" asp-action="Jobs" asp-route-column="@ViewBag.column" asp-route-value="@ViewBag.items[i]">@ViewBag.items[i]</a></td>
+    <tr>
+        <td><a asp-controller="List" asp-action="Jobs" asp-route-column="@ViewBag.column" asp-route-value="@item">@item</a></td>
     </tr>  
 }   
 </table>
