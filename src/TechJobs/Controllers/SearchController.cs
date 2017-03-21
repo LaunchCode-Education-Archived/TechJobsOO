@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
+using System;
 
 namespace TechJobs.Controllers
 {
@@ -8,15 +9,15 @@ namespace TechJobs.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.columns = ListController.columnChoices;
+            ViewBag.columns = JobSearchType.GetAll();
             return View();
         }
 
         public IActionResult Results(string searchType, string searchTerm = "")
         {
-            List<Dictionary<string, string>> jobs;
+            List<Job> jobs;
 
-            if (searchType.Equals("all") || searchTerm.Equals(""))
+            if (searchType.Equals(JobSearchType.All) || searchTerm.Equals(""))
             {
                 jobs = JobData.FindByValue(searchTerm);
             }
@@ -25,7 +26,7 @@ namespace TechJobs.Controllers
                 jobs = JobData.FindByColumnAndValue(searchType, searchTerm);
             }
 
-            ViewBag.columns = ListController.columnChoices;
+            ViewBag.columns = JobSearchType.GetAll();
             ViewBag.jobs = jobs;
 
             return View("Index");

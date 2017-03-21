@@ -1,10 +1,10 @@
 ﻿<h1>@ViewBag.title</h1>
 
 <table>
-@foreach (string item in ViewBag.items)
+@foreach (var item in ViewBag.items)
 {
     <tr>
-        <td><a asp-controller="List" asp-action="Jobs" asp-route-column="@ViewBag.column" asp-route-value="@item">@item</a></td>
+        <td><a asp-controller="List" asp-action="Jobs" asp-route-column="@ViewBag.column" asp-route-value="@item.Value">@item.Value</a></td>
     </tr>  
 }   
 </table>

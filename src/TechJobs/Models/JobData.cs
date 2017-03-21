@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -7,70 +9,54 @@ namespace TechJobs.Models
 {
     class JobData
     {
-        static List<Dictionary<string, string>> AllJobs = new List<Dictionary<string, string>>();
-        static bool IsDataLoaded = false;
+        private static List<Job> jobs = new List<Job>();
 
-        public static List<Dictionary<string, string>> FindAll()
+        private static Dictionary<string, List<JobField>> fieldData
+            = new Dictionary<string, List<JobField>>();
+
+        static JobData()
+        {
+            fieldData.Add(JobFieldType.Employer, new List<JobField>());
+            fieldData.Add(JobFieldType.Location, new List<JobField>());
+            fieldData.Add(JobFieldType.CoreCompetency, new List<JobField>());
+            fieldData.Add(JobFieldType.PositionType, new List<JobField>());
+        }
+
+        private static bool IsDataLoaded = false;
+
+        public static List<Job> FindAll()
         {
             LoadData();
-
-            // Bonus mission: return a copy
-            return new List<Dictionary<string, string>>(AllJobs);
+            return jobs;
         }
 
         /*
          * Returns a list of all values contained in a given column,
          * without duplicates. 
          */
-        public static List<string> FindAll(string column)
+        public static List<JobField> FindAll(string column)
         {
             LoadData();
-
-            List<string> values = new List<string>();
-
-            foreach (Dictionary<string, string> job in AllJobs)
-            {
-                string aValue = job[column];
-
-                if (!values.Contains(aValue))
-                {
-                    values.Add(aValue);
-                }
-            }
-
-            // Bonus mission: sort results alphabetically
-            values.Sort();
-            return values;
+            return fieldData[column];
         }
 
         /**
          * Search all columns for the given term
          */
-        public static List<Dictionary<string, string>> FindByValue(string value)
+        public static List<Job> FindByValue(string value)
         {
             // load data, if not already loaded
             LoadData();
 
-            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            var results = from j in jobs
+                          where j.Employer.Contains(value)
+                          || j.Location.Contains(value)
+                          || j.Name.ToLower().Contains(value.ToLower())
+                          || j.CoreCompetency.Contains(value)
+                          || j.PositionType.Contains(value)
+                          select j;
 
-            foreach (Dictionary<string, string> row in AllJobs)
-            {
-
-                foreach (string key in row.Keys)
-                {
-                    string aValue = row[key];
-
-                    if (aValue.ToLower().Contains(value.ToLower()))
-                    {
-                        jobs.Add(row);
-
-                        // Finding one field in a job that matches is sufficient
-                        break;
-                    }
-                }
-            }
-
-            return jobs;
+            return results.ToList();
         }
 
         /**
@@ -80,24 +66,16 @@ namespace TechJobs.Models
          * For example, searching for employer "Enterprise" will include results
          * with "Enterprise Holdings, Inc".
          */
-        public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
+        public static List<Job> FindByColumnAndValue(string column, string value)
         {
             // load data, if not already loaded
             LoadData();
 
-            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            var results = from j in jobs
+                          where j.GetFieldByType(column).Contains(value)
+                          select j;
 
-            foreach (Dictionary<string, string> row in AllJobs)
-            {
-                string aValue = row[column];
-
-                if (aValue.ToLower().Contains(value.ToLower()))
-                {
-                    jobs.Add(row);
-                }
-            }
-
-            return jobs;
+            return results.ToList();
         }
 
         /*
@@ -129,19 +107,53 @@ namespace TechJobs.Models
             string[] headers = rows[0];
             rows.Remove(headers);
 
-            // Parse each row array into a more friendly Dictionary
+            // Parse each row array into a Job object
+            // Assumes CSV column ordering: 
+            //      name,employer,location,position type,core competency
             foreach (string[] row in rows)
             {
-                Dictionary<string, string> rowDict = new Dictionary<string, string>();
+                JobField employer = AddUnique(row[1], fieldData[JobFieldType.Employer]);
+                JobField location = AddUnique(row[2], fieldData[JobFieldType.Location]);
+                JobField positionType = AddUnique(row[3], fieldData[JobFieldType.PositionType]);
+                JobField coreCompetency = AddUnique(row[4], fieldData[JobFieldType.CoreCompetency]);
 
-                for (int i = 0; i < headers.Length; i++)
-                {
-                    rowDict.Add(headers[i], row[i]);
-                }
-                AllJobs.Add(rowDict);
+                Job newJob = new Job {
+                    Name = row[0],
+                    Employer = employer,
+                    Location = location,
+                    PositionType = positionType,
+                    CoreCompetency = coreCompetency
+                };
+                jobs.Add(newJob);
             }
 
             IsDataLoaded = true;
+        }
+
+        private static JobField AddUnique(string fieldValue, List<JobField> fieldList)
+        {
+            var results = from field in fieldList
+                          where field.Value.Equals(fieldValue)
+                          select field;
+
+            JobField theField;
+
+            if (!results.Any())
+            {
+                theField = new JobField
+                {
+                    Value = fieldValue
+                };
+
+                fieldList.Add(theField);
+            }
+            else
+            {
+                theField = results.Single();
+            }
+
+            return theField;
+
         }
 
         /*

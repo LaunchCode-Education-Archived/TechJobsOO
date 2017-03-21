@@ -4,15 +4,15 @@
     <h2>Search by:</h2>
 
     <p>
-        @foreach (KeyValuePair<string, string> column in ViewBag.columns)
+        @foreach (string column in ViewBag.columns)
         {
             <span>
                 <input type="radio"
                        name="searchType"
-                       id="@column.Key"
-                       value="@column.Key" 
-                       checked="@column.Key == 'all''"/>
-                <label for="@column.Key">@column.Value</label>
+                       id="@column"
+                       value="@column" 
+                       checked="@column == 'All''"/>
+                <label for="@column">@column</label>
             </span>
         }
     </p>
@@ -32,16 +32,29 @@
 
     <h3>@ViewBag.jobs.Count Result(s)</h3>
 
-    @foreach (Dictionary<string, string> job in ViewBag.jobs)
+    @foreach (var job in ViewBag.jobs)
     {
         <table class="job-listing">
-            @foreach (KeyValuePair<string, string> jobField in job)
-            {
-                <tr>
-                    <td>@jobField.Key</td>
-                    <td>@jobField.Value</td>
-                </tr>
-            }
+            <tr>
+                <td>Name</td>
+                <td>@job.Name</td>
+            </tr>
+            <tr>
+                <td>Employer</td>
+                <td>@job.Employer</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>@job.Location</td>
+            </tr>
+            <tr>
+                <td>Skill</td>
+                <td>@job.CoreCompetency</td>
+            </tr>
+            <tr>
+                <td>Position Type</td>
+                <td>@job.PositionType</td>
+            </tr>
         </table>
     }
 }
