@@ -2,7 +2,6 @@
 {
     public class JobFieldType
     {
-        public const string Name = "Name";
         public const string Employer = "Employer";
         public const string Location = "Location";
         public const string CoreCompetency = "Skill";
@@ -11,7 +10,6 @@
         public static string[] GetAll()
         {
             return new string[] {
-                Name,
                 Employer,
                 Location,
                 CoreCompetency,
@@ -50,7 +48,6 @@
         public static new string[] GetAll()
         {
             return new string[] {
-                Name,
                 Employer,
                 Location,
                 CoreCompetency,

@@ -3,10 +3,8 @@ using TechJobs.Models;
 
 namespace TechJobs.ViewModels
 {
-    public class JobsViewModel
+    public class JobsViewModel : BaseViewModel
     {
         public List<Job> Jobs { get; set; }
-        public string[] Columns { get; set; } = JobSearchType.GetAll();
-        public string Title { get; set; } = "Jobs";
     }
 }
