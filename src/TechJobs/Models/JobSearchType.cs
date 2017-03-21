@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TechJobs.Models
+﻿namespace TechJobs.Models
 {
     public class JobFieldType
     {

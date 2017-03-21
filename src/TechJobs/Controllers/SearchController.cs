@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
-using System;
 
 namespace TechJobs.Controllers
 {
