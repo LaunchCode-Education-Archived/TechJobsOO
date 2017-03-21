@@ -1,7 +1,8 @@
-﻿<h1>@ViewBag.Title</h1>
-<h2>View All</h2>
+﻿@model TechJobs.ViewModels.JobFieldsViewModel
+
+<h1>@Model.Title</h1>
 <ul>
-    @foreach (var column in ViewBag.columns) {
+    @foreach (string column in Model.Columns) {
         <li>
             <a asp-controller="List" asp-action="Values" asp-route-column="@column">@column</a>
         </li>
