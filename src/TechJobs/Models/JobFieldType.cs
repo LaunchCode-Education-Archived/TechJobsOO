@@ -18,6 +18,28 @@
                 PositionType
             };
         }
+
+        public static JobField GetFieldByType(Job job, string type)
+        {
+            if (type.Equals(JobFieldType.Employer))
+            {
+                return job.Employer;
+            }
+            else if (type.Equals(JobFieldType.Location))
+            {
+                return job.Location;
+            }
+            else if (type.Equals(JobFieldType.CoreCompetency))
+            {
+                return job.CoreCompetency;
+            }
+            else if (type.Equals(JobFieldType.PositionType))
+            {
+                return job.PositionType;
+            }
+
+            return null;
+        }
     }
 
     public class JobSearchType : JobFieldType

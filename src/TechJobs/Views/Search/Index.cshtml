@@ -1,10 +1,10 @@
-﻿<h1>@ViewBag.title</h1>
+﻿@model TechJobs.ViewModels.JobsViewModel
+
+<h1>@Model.Title</h1>
 
 <form action="/Search/Results">
-    <h2>Search by:</h2>
-
     <p>
-        @foreach (string column in ViewBag.columns)
+        @foreach (string column in Model.Columns)
         {
             <span>
                 <input type="radio"
@@ -27,12 +27,12 @@
 
 <hr />
 
-@if (ViewBag.jobs != null)
+@if (Model.Jobs != null)
 {
 
-    <h3>@ViewBag.jobs.Count Result(s)</h3>
+    <h3>@Model.Jobs.Count Result(s)</h3>
 
-    @foreach (var job in ViewBag.jobs)
+    @foreach (var job in Model.Jobs)
     {
         <table class="job-listing">
             <tr>

@@ -70,7 +70,7 @@ namespace TechJobs.Models
             LoadData();
 
             var results = from j in jobs
-                          where j.GetFieldByType(column).Contains(value)
+                          where JobFieldType.GetFieldByType(j, column).Contains(value)
                           select j;
 
             return results.ToList();
