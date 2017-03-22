@@ -4,22 +4,22 @@
 
 <form action="/Search/Results">
     <p>
-        @foreach (string column in Model.Columns)
+        @foreach (var column in Model.Columns)
         {
             <span>
                 <input type="radio"
-                       name="searchType"
-                       id="@column"
-                       value="@column" 
-                       checked="@column == 'All''"/>
-                <label for="@column">@column</label>
+                       name="Column"
+                       id="@column.Type"
+                       value="@column.Type" 
+                       checked="@column.Type.Equals(Model.Column)"/>
+                <label for="@column.Type">@column</label>
             </span>
         }
     </p>
 
     <p>
-        <label for="searchTerm">Keyword:</label>
-        <input type="text" name="searchTerm" id="searchTerm" />
+        <label asp-for="Value"></label>
+        <input asp-for="Value" />
     </p>
 
     <input type="submit" value="Search" />

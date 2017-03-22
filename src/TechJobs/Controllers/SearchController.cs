@@ -10,30 +10,22 @@ namespace TechJobs.Controllers
         public IActionResult Index()
         {
             JobsViewModel jobsViewModel = new JobsViewModel();
-            jobsViewModel.Columns = JobSearchType.GetAll();
             jobsViewModel.Title = "Search";
             return View(jobsViewModel);
         }
 
-        public IActionResult Results(string searchType, string searchTerm = "")
+        public IActionResult Results(JobsViewModel jobsViewModel)
         {
-            List<Job> jobs;
 
-            if (searchType.Equals(JobSearchType.All) || searchTerm.Equals(""))
+            if (jobsViewModel.Column.Equals(JobFieldType.All) || jobsViewModel.Value.Equals(""))
             {
-                jobs = JobData.FindByValue(searchTerm);
+                jobsViewModel.Jobs = JobData.FindByValue(jobsViewModel.Value);
             }
             else
             {
-                jobs = JobData.FindByColumnAndValue(searchType, searchTerm);
+                jobsViewModel.Jobs = JobData.FindByColumnAndValue(jobsViewModel.Column, jobsViewModel.Value);
             }
-
-            ViewBag.columns = JobSearchType.GetAll();
-            ViewBag.jobs = jobs;
-
-            JobsViewModel jobsViewModel = new JobsViewModel();
-            jobsViewModel.Columns = JobSearchType.GetAll();
-            jobsViewModel.Jobs = jobs;
+            
             jobsViewModel.Title = "Search";
 
             return View("Index", jobsViewModel);

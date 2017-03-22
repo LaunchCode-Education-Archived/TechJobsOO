@@ -10,9 +10,11 @@ namespace TechJobs.Controllers
 {
     public class JobController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
-            return Redirect("New");
+            Job theJob = JobData.GetJobById(id);
+
+            return View(theJob);
         }
 
         public IActionResult New()
@@ -27,7 +29,17 @@ namespace TechJobs.Controllers
             if (ModelState.IsValid)
             {
                 // create new job object
-                return Redirect("New");
+                Job newJob = new Job {
+                    Name = newJobViewModel.Name,
+                    Location = JobData.GetFieldById(newJobViewModel.LocationID),
+                    Employer = JobData.GetFieldById(newJobViewModel.EmployerID),
+                    CoreCompetency = JobData.GetFieldById(newJobViewModel.CoreCompetencyID),
+                    PositionType = JobData.GetFieldById(newJobViewModel.PositionTypeID)
+                };
+
+                JobData.Add(newJob);
+
+                return Redirect(String.Format("{0}", newJob.ID));
             }
 
             return View(newJobViewModel);

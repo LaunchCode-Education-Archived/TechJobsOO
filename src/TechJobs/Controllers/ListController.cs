@@ -9,17 +9,15 @@ namespace TechJobs.Controllers
     {
         public IActionResult Index()
         {
-            ViewBag.columns = JobSearchType.GetAll();
-
             JobFieldsViewModel jobFieldsViewModel = new JobFieldsViewModel();
             jobFieldsViewModel.Title = "View Job Fields";
 
             return View(jobFieldsViewModel);
         }
 
-        public IActionResult Values(string column)
+        public IActionResult Values(JobFieldType column)
         {
-            if (column.Equals(JobSearchType.All))
+            if (column.Equals(JobFieldType.All))
             {
                 JobsViewModel jobsViewModel = new JobsViewModel();
                 jobsViewModel.Jobs = JobData.FindAll();
@@ -30,18 +28,20 @@ namespace TechJobs.Controllers
             {
                 JobFieldsViewModel jobFieldsViewModel = new JobFieldsViewModel();
                 jobFieldsViewModel.Fields = JobData.FindAll(column);
-                jobFieldsViewModel.Title =  "All " + column + " Values";
+                JobFieldTypeDisplay columnDisplay = new JobFieldTypeDisplay { Type = column };
+                jobFieldsViewModel.Title =  "All " + columnDisplay.ToString() + " Values";
                 jobFieldsViewModel.Column = column;
 
                 return View(jobFieldsViewModel);
             }
         }
 
-        public IActionResult Jobs(string column, string value)
+        public IActionResult Jobs(JobFieldType column, string value)
         {
             JobsViewModel jobsViewModel = new JobsViewModel();
             jobsViewModel.Jobs = JobData.FindByColumnAndValue(column, value);
-            jobsViewModel.Title = "Jobs with " + column + ": " + value;
+            JobFieldTypeDisplay columnDisplay = new JobFieldTypeDisplay { Type = column };
+            jobsViewModel.Title = "Jobs with " + columnDisplay.ToString() + ": " + value;
 
             return View(jobsViewModel);
         }

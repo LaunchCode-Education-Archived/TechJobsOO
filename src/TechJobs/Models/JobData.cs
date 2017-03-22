@@ -9,8 +9,10 @@ namespace TechJobs.Models
     {
         private static List<Job> jobs = new List<Job>();
 
-        private static Dictionary<string, List<JobField>> fieldData
-            = new Dictionary<string, List<JobField>>();
+        private static Dictionary<JobFieldType, List<JobField>> fieldData
+            = new Dictionary<JobFieldType, List<JobField>>();
+
+        private static List<JobField> allFields = new List<JobField>();
 
         static JobData()
         {
@@ -29,17 +31,17 @@ namespace TechJobs.Models
         }
 
         /*
-         * Returns a list of all values contained in a given column,
+         * Returns a list of all values contained in a given column/field,
          * without duplicates. 
          */
-        public static List<JobField> FindAll(string column)
+        public static List<JobField> FindAll(JobFieldType column)
         {
             LoadData();
             return fieldData[column];
         }
 
         /**
-         * Search all columns for the given term
+         * Search all columns/fields for the given term
          */
         public static List<Job> FindByValue(string value)
         {
@@ -64,13 +66,13 @@ namespace TechJobs.Models
          * For example, searching for employer "Enterprise" will include results
          * with "Enterprise Holdings, Inc".
          */
-        public static List<Job> FindByColumnAndValue(string column, string value)
+        public static List<Job> FindByColumnAndValue(JobFieldType column, string value)
         {
             // load data, if not already loaded
             LoadData();
 
             var results = from j in jobs
-                          where JobFieldType.GetFieldByType(j, column).Contains(value)
+                          where GetFieldByType(j, column).Contains(value)
                           select j;
 
             return results.ToList();
@@ -144,6 +146,7 @@ namespace TechJobs.Models
                 };
 
                 fieldList.Add(theField);
+                allFields.Add(theField);
             }
             else
             {
@@ -190,5 +193,47 @@ namespace TechJobs.Models
 
             return rowValues.ToArray();
         }
+
+        public static JobField GetFieldByType(Job job, JobFieldType type)
+        {
+
+            switch (type)
+            {
+                case JobFieldType.Employer:
+                    return job.Employer;
+                case JobFieldType.Location:
+                    return job.Location;
+                case JobFieldType.CoreCompetency:
+                    return job.CoreCompetency;
+                case JobFieldType.PositionType:
+                    return job.PositionType;
+            }
+
+            return null;
+        }
+
+        public static JobField GetFieldById(int id)
+        {
+            var results = from field in allFields
+                          where field.ID == id
+                          select field;
+
+            return results.Single();
+        }
+
+        public static Job GetJobById(int id)
+        {
+            var results = from j in jobs
+                          where j.ID == id
+                          select j;
+
+            return results.Single();
+        }
+
+        public static void Add(Job newJob)
+        {
+            jobs.Add(newJob);
+        }
+
     }
 }
