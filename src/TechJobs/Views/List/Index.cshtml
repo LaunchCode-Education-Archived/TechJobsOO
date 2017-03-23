@@ -1,0 +1,10 @@
+﻿@model TechJobs.ViewModels.JobFieldsViewModel
+
+<h1>@Model.Title</h1>
+<ul>
+    @foreach (var column in Model.Columns) {
+        <li>
+            <a asp-controller="List" asp-action="Values" asp-route-column="@column.Type">@column</a>
+        </li>
+    }
+</ul>

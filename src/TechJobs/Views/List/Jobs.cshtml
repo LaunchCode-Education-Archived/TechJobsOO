@@ -1,0 +1,35 @@
+﻿@model TechJobs.ViewModels.SearchJobsViewModel
+
+<h1>@Model.Title</h1>
+
+@if (Model.Jobs != null)
+{
+
+    <h3>@Model.Jobs.Count Result(s)</h3>
+
+    @foreach (var job in Model.Jobs)
+    {
+        <table class="job-listing">
+            <tr>
+                <td>Name</td>
+                <td>@job.Name</td>
+            </tr>
+            <tr>
+                <td>Employer</td>
+                <td>@job.Employer</td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td>@job.Location</td>
+            </tr>
+            <tr>
+                <td>Skill</td>
+                <td>@job.CoreCompetency</td>
+            </tr>
+            <tr>
+                <td>Position Type</td>
+                <td>@job.PositionType</td>
+            </tr>
+        </table>
+    }
+}

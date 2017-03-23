@@ -1,0 +1,10 @@
+﻿@{ 
+    ViewBag.Title = "Home";
+}
+<p>View jobs by:</p>
+<ul>
+    @foreach (KeyValuePair<string, string> action in ViewBag.actions)
+    {
+        <li><a href="/@action.Key">@action.Value</a></li>
+    }
+</ul>
