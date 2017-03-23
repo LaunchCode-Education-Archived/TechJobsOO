@@ -6,12 +6,12 @@ namespace TechJobs.Controllers
 {
     public class JobController : Controller
     {
-        // The detail display for a given Job
+        // The detail display for a given Job at URLs like /Job?id=17
         public IActionResult Index(int id)
         {
-            Job theJob = JobData.GetJobById(id);
+            // TODO #1 - get the Job with the given ID and pass it into the view
 
-            return View(theJob);
+            return View();
         }
 
         public IActionResult New()
@@ -23,22 +23,9 @@ namespace TechJobs.Controllers
         [HttpPost]
         public IActionResult New(NewJobViewModel newJobViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                // create new job object
-                Job newJob = new Job {
-                    Name = newJobViewModel.Name,
-                    Location = JobData.GetFieldById(newJobViewModel.LocationID),
-                    Employer = JobData.GetFieldById(newJobViewModel.EmployerID),
-                    CoreCompetency = JobData.GetFieldById(newJobViewModel.CoreCompetencyID),
-                    PositionType = JobData.GetFieldById(newJobViewModel.PositionTypeID)
-                };
-
-                JobData.Add(newJob);
-
-                // Redirect to the detail page for the new job
-                return Redirect(string.Format("/Job?id={0}", newJob.ID.ToString()));
-            }
+            // TODO #6 - Validate the ViewModel and if valid, create a 
+            // new Job and add it to the JobData data store. Then
+            // redirect to the Job detail (Index) action/view for the new Job.
 
             return View(newJobViewModel);
         }
