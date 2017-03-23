@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
 using TechJobs.ViewModels;
 
@@ -10,6 +6,7 @@ namespace TechJobs.Controllers
 {
     public class JobController : Controller
     {
+        // The detail display for a given Job
         public IActionResult Index(int id)
         {
             Job theJob = JobData.GetJobById(id);
@@ -39,7 +36,8 @@ namespace TechJobs.Controllers
 
                 JobData.Add(newJob);
 
-                return Redirect(String.Format("{0}", newJob.ID));
+                // Redirect to the detail page for the new job
+                return Redirect(string.Format("/Job?id={0}", newJob.ID.ToString()));
             }
 
             return View(newJobViewModel);

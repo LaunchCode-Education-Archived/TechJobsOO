@@ -7,6 +7,10 @@ namespace TechJobs.Models
 {
     class JobData
     {
+        /**
+         * A data store for Job objects
+         */
+
         private static List<Job> jobs = new List<Job>();
 
         private static Dictionary<JobFieldType, List<JobField>> fieldData
@@ -14,40 +18,42 @@ namespace TechJobs.Models
 
         private static List<JobField> allFields = new List<JobField>();
 
+        // A static constructor to initialize our data structures
         static JobData()
         {
             fieldData.Add(JobFieldType.Employer, new List<JobField>());
             fieldData.Add(JobFieldType.Location, new List<JobField>());
             fieldData.Add(JobFieldType.CoreCompetency, new List<JobField>());
             fieldData.Add(JobFieldType.PositionType, new List<JobField>());
+
+            JobDataImporter.LoadData();
         }
 
-        private static bool IsDataLoaded = false;
 
+        /**
+         * Returns all jobs in the data store
+         */
         public static List<Job> FindAll()
         {
-            LoadData();
             return jobs;
         }
 
-        /*
-         * Returns a list of all values contained in a given column/field,
-         * without duplicates. 
+
+        /**
+         * Returns a list of all JobFields in the data store of a given type
          */
         public static List<JobField> FindAll(JobFieldType column)
         {
-            LoadData();
             return fieldData[column];
         }
 
+
         /**
-         * Search all columns/fields for the given term
+         * Return all Job objects in the data store
+         * with a field containing the given term
          */
         public static List<Job> FindByValue(string value)
         {
-            // load data, if not already loaded
-            LoadData();
-
             var results = from j in jobs
                           where j.Employer.Contains(value)
                           || j.Location.Contains(value)
@@ -59,82 +65,32 @@ namespace TechJobs.Models
             return results.ToList();
         }
 
+
         /**
          * Returns results of search the jobs data by key/value, using
          * inclusion of the search term.
-         *
-         * For example, searching for employer "Enterprise" will include results
-         * with "Enterprise Holdings, Inc".
          */
         public static List<Job> FindByColumnAndValue(JobFieldType column, string value)
         {
-            // load data, if not already loaded
-            LoadData();
-
             var results = from j in jobs
                           where GetFieldByType(j, column).Contains(value)
                           select j;
 
             return results.ToList();
         }
+        
 
-        /*
-         * Load and parse data from job_data.csv
+        /**
+         * Adds a JobField with provided value and type, 
+         * checking for duplicates first
          */
-        private static void LoadData()
+        internal static JobField AddUnique(string fieldValue, JobFieldType field)
         {
+            List<JobField> fieldList = fieldData[field];
 
-            if (IsDataLoaded)
-            {
-                return;
-            }
-
-            List<string[]> rows = new List<string[]>();
-
-            using (StreamReader reader = File.OpenText("Models/job_data.csv"))
-            {
-                while (reader.Peek() >= 0)
-                {
-                    string line = reader.ReadLine();
-                    string[] rowArrray = CSVRowToStringArray(line);
-                    if (rowArrray.Length > 0)
-                    {
-                        rows.Add(rowArrray);
-                    }
-                }
-            }
-
-            string[] headers = rows[0];
-            rows.Remove(headers);
-
-            // Parse each row array into a Job object
-            // Assumes CSV column ordering: 
-            //      name,employer,location,position type,core competency
-            foreach (string[] row in rows)
-            {
-                JobField employer = AddUnique(row[1], fieldData[JobFieldType.Employer]);
-                JobField location = AddUnique(row[2], fieldData[JobFieldType.Location]);
-                JobField positionType = AddUnique(row[3], fieldData[JobFieldType.PositionType]);
-                JobField coreCompetency = AddUnique(row[4], fieldData[JobFieldType.CoreCompetency]);
-
-                Job newJob = new Job {
-                    Name = row[0],
-                    Employer = employer,
-                    Location = location,
-                    PositionType = positionType,
-                    CoreCompetency = coreCompetency
-                };
-                jobs.Add(newJob);
-            }
-
-            IsDataLoaded = true;
-        }
-
-        private static JobField AddUnique(string fieldValue, List<JobField> fieldList)
-        {
-            var results = from field in fieldList
-                          where field.Value.Equals(fieldValue)
-                          select field;
+            var results = from aField in fieldList
+                          where aField.Value.Equals(fieldValue)
+                          select aField;
 
             JobField theField;
 
@@ -157,46 +113,14 @@ namespace TechJobs.Models
 
         }
 
-        /*
-         * Parse a single line of a CSV file into a string array
+
+        /**
+         * Returns the JobField of the given type from the Job object,
+         * for all types other than JobFieldType.All. In this case, 
+         * null is returned.
          */
-        private static string[] CSVRowToStringArray(string row, char fieldSeparator = ',', char stringSeparator = '\"')
-        {
-            bool isBetweenQuotes = false;
-            StringBuilder valueBuilder = new StringBuilder();
-            List<string> rowValues = new List<string>();
-
-            // Loop through the row string one char at a time
-            foreach (char c in row.ToCharArray())
-            {
-                if ((c == fieldSeparator && !isBetweenQuotes))
-                {
-                    rowValues.Add(valueBuilder.ToString());
-                    valueBuilder.Clear();
-                }
-                else
-                {
-                    if (c == stringSeparator)
-                    {
-                        isBetweenQuotes = !isBetweenQuotes;
-                    }
-                    else
-                    {
-                        valueBuilder.Append(c);
-                    }
-                }
-            }
-
-            // Add the final value
-            rowValues.Add(valueBuilder.ToString());
-            valueBuilder.Clear();
-
-            return rowValues.ToArray();
-        }
-
         public static JobField GetFieldByType(Job job, JobFieldType type)
         {
-
             switch (type)
             {
                 case JobFieldType.Employer:
@@ -212,6 +136,11 @@ namespace TechJobs.Models
             return null;
         }
 
+
+        /**
+         * Returns the JobField with the given ID,
+         * if it exists in the store.
+         */
         public static JobField GetFieldById(int id)
         {
             var results = from field in allFields
@@ -221,6 +150,11 @@ namespace TechJobs.Models
             return results.Single();
         }
 
+
+        /**
+         * Returns the Job with the given ID,
+         * if it exists in the store
+         */
         public static Job GetJobById(int id)
         {
             var results = from j in jobs
@@ -230,6 +164,9 @@ namespace TechJobs.Models
             return results.Single();
         }
 
+        /**
+         * Adds the Job to the data store
+         */
         public static void Add(Job newJob)
         {
             jobs.Add(newJob);

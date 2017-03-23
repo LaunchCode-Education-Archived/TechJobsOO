@@ -1,17 +1,19 @@
-﻿@model TechJobs.ViewModels.JobsViewModel
+﻿@model TechJobs.ViewModels.SearchJobsViewModel
 
 <h1>@Model.Title</h1>
 
 <form action="/Search/Results">
     <p>
         @foreach (var column in Model.Columns)
-        {
+        { 
+            var checkedColumn = column.Type.Equals(Model.Column);
+
             <span>
                 <input type="radio"
                        name="Column"
                        id="@column.Type"
                        value="@column.Type" 
-                       checked="@column.Type.Equals(Model.Column)"/>
+                       checked="@checkedColumn"/>
                 <label for="@column.Type">@column</label>
             </span>
         }

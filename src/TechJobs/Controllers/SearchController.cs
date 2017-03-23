@@ -7,14 +7,16 @@ namespace TechJobs.Controllers
 {
     public class SearchController : Controller
     {
+        // Display the search form
         public IActionResult Index()
         {
-            JobsViewModel jobsViewModel = new JobsViewModel();
+            SearchJobsViewModel jobsViewModel = new SearchJobsViewModel();
             jobsViewModel.Title = "Search";
             return View(jobsViewModel);
         }
 
-        public IActionResult Results(JobsViewModel jobsViewModel)
+        // Process search submission and display search results
+        public IActionResult Results(SearchJobsViewModel jobsViewModel)
         {
 
             if (jobsViewModel.Column.Equals(JobFieldType.All) || jobsViewModel.Value.Equals(""))
