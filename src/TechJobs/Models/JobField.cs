@@ -2,7 +2,11 @@
 {
     public class JobField
     {
-        public int ID { get; set; }
+        private int id;
+        public int ID {
+            get { return id; }
+            private set { id = value; }
+        }
         private static int nextId = 1;
 
         public string Value { get; set; }

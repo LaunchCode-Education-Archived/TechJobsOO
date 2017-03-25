@@ -5,7 +5,7 @@
 
         private int id;
         public int ID {
-            get { return ID; }
+            get { return id; }
             private set { id = value; }
         }
 
