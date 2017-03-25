@@ -2,7 +2,13 @@
 {
     public class Job
     {
-        public int ID { get; set; }
+
+        private int id;
+        public int ID {
+            get { return ID; }
+            private set { id = value; }
+        }
+
         private static int nextId = 1;
 
         public string Name { get; set; }
