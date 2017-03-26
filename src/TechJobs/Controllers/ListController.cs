@@ -1,11 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
+using TechJobs.Data;
 using TechJobs.ViewModels;
+using System.Linq;
 
 namespace TechJobs.Controllers
 {
     public class ListController : Controller
     {
+
+        // Our reference to the data store
+        private static JobData jobData;
+
+        static ListController ()
+        {
+            jobData = JobData.GetInstance();
+        }
+
         // Lists options for browsing, by "column"
         public IActionResult Index()
         {
@@ -21,16 +32,15 @@ namespace TechJobs.Controllers
             if (column.Equals(JobFieldType.All))
             {
                 SearchJobsViewModel jobsViewModel = new SearchJobsViewModel();
-                jobsViewModel.Jobs = JobData.FindAll();
+                jobsViewModel.Jobs = jobData.Jobs;
                 jobsViewModel.Title =  "All Jobs";
                 return View("Jobs", jobsViewModel);
             }
             else
             {
                 JobFieldsViewModel jobFieldsViewModel = new JobFieldsViewModel();
-                jobFieldsViewModel.Fields = JobData.FindAll(column);
-                JobFieldTypeDisplay columnDisplay = new JobFieldTypeDisplay { Type = column };
-                jobFieldsViewModel.Title =  "All " + columnDisplay + " Values";
+                jobFieldsViewModel.Fields = jobData.Employers.ToList().Cast<JobField>();
+                jobFieldsViewModel.Title =  "All " + column + " Values";
                 jobFieldsViewModel.Column = column;
 
                 return View(jobFieldsViewModel);
@@ -41,9 +51,8 @@ namespace TechJobs.Controllers
         public IActionResult Jobs(JobFieldType column, string value)
         {
             SearchJobsViewModel jobsViewModel = new SearchJobsViewModel();
-            jobsViewModel.Jobs = JobData.FindByColumnAndValue(column, value);
-            JobFieldTypeDisplay columnDisplay = new JobFieldTypeDisplay { Type = column };
-            jobsViewModel.Title = "Jobs with " + columnDisplay + ": " + value;
+            jobsViewModel.Jobs = jobData.FindByColumnAndValue(column, value);
+            jobsViewModel.Title = "Jobs with " + column + ": " + value;
 
             return View(jobsViewModel);
         }

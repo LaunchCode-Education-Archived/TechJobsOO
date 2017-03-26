@@ -6,10 +6,10 @@
         private static int nextId = 1;
 
         public string Name { get; set; }
-        public JobField Employer { get; set; }
-        public JobField Location { get; set; }
-        public JobField CoreCompetency { get; set; }
-        public JobField PositionType { get; set; }
+        public Employer Employer { get; set; }
+        public Location Location { get; set; }
+        public CoreCompetency CoreCompetency { get; set; }
+        public PositionType PositionType { get; set; }
 
         public Job()
         {

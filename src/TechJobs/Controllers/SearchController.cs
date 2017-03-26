@@ -1,12 +1,21 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
+using TechJobs.Data;
 using TechJobs.ViewModels;
 
 namespace TechJobs.Controllers
 {
     public class SearchController : Controller
     {
+
+        // Our reference to the data store
+        private static JobData jobData;
+
+        static SearchController()
+        {
+            jobData = JobData.GetInstance();
+        }
+
         // Display the search form
         public IActionResult Index()
         {
@@ -21,11 +30,11 @@ namespace TechJobs.Controllers
 
             if (jobsViewModel.Column.Equals(JobFieldType.All) || jobsViewModel.Value.Equals(""))
             {
-                jobsViewModel.Jobs = JobData.FindByValue(jobsViewModel.Value);
+                jobsViewModel.Jobs = jobData.FindByValue(jobsViewModel.Value);
             }
             else
             {
-                jobsViewModel.Jobs = JobData.FindByColumnAndValue(jobsViewModel.Column, jobsViewModel.Value);
+                jobsViewModel.Jobs = jobData.FindByColumnAndValue(jobsViewModel.Column, jobsViewModel.Value);
             }
             
             jobsViewModel.Title = "Search";

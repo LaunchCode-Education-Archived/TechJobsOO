@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TechJobs.Models;
 
-namespace TechJobs.Models
+namespace TechJobs.Data
 {
     public class JobDataImporter
     {
@@ -11,7 +12,7 @@ namespace TechJobs.Models
         /**
          * Load and parse data from job_data.csv
          */
-        internal static void LoadData()
+        internal static void LoadData(JobData jobData)
         {
 
             if (IsDataLoaded)
@@ -21,7 +22,7 @@ namespace TechJobs.Models
 
             List<string[]> rows = new List<string[]>();
 
-            using (StreamReader reader = File.OpenText("Models/job_data.csv"))
+            using (StreamReader reader = File.OpenText("Data/job_data.csv"))
             {
                 while (reader.Peek() >= 0)
                 {
@@ -44,10 +45,10 @@ namespace TechJobs.Models
              */
             foreach (string[] row in rows)
             {
-                JobField employer = JobData.AddUnique(row[1], JobFieldType.Employer);
-                JobField location = JobData.AddUnique(row[2], JobFieldType.Location);
-                JobField positionType = JobData.AddUnique(row[3], JobFieldType.PositionType);
-                JobField coreCompetency = JobData.AddUnique(row[4], JobFieldType.CoreCompetency);
+                Employer employer = jobData.Employers.AddUnique(row[1]);
+                Location location = jobData.Locations.AddUnique(row[2]);
+                PositionType positionType = jobData.PositionTypes.AddUnique(row[3]);
+                CoreCompetency coreCompetency = jobData.CoreCompetencies.AddUnique(row[4]);
 
                 Job newJob = new Job
                 {
@@ -57,7 +58,7 @@ namespace TechJobs.Models
                     PositionType = positionType,
                     CoreCompetency = coreCompetency
                 };
-                JobData.Add(newJob);
+                jobData.Jobs.Add(newJob);
             }
 
             IsDataLoaded = true;

@@ -4,7 +4,7 @@
 <ul>
     @foreach (var column in Model.Columns) {
         <li>
-            <a asp-controller="List" asp-action="Values" asp-route-column="@column.Type">@column</a>
+            <a asp-controller="List" asp-action="Values" asp-route-column="@column">@column</a>
         </li>
     }
 </ul>

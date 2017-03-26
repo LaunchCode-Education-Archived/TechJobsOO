@@ -13,6 +13,11 @@
             nextId++;
         }
 
+        public JobField(string value) : this()
+        {
+            Value = value;
+        }
+
         // Provide a basic case-insensitive search
         public bool Contains(string testValue)
         {
