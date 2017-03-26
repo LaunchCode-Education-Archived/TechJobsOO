@@ -21,7 +21,7 @@ namespace TechJobs.ViewModels
         public string Value { get; set; } = "";
 
         // All columns, for display
-        public List<JobFieldTypeDisplay> Columns { get; set; }
+        public List<JobFieldType> Columns { get; set; }
 
         // View title
         public string Title { get; set; } = "";
@@ -30,14 +30,11 @@ namespace TechJobs.ViewModels
         {
             // Populate the list of all columns
 
-            Columns = new List<JobFieldTypeDisplay>();
+            Columns = new List<JobFieldType>();
 
-            foreach (var enumVal in Enum.GetValues(typeof(JobFieldType)))
+            foreach (JobFieldType enumVal in Enum.GetValues(typeof(JobFieldType)))
             {
-                Columns.Add(new JobFieldTypeDisplay
-                {
-                    Type = (JobFieldType)enumVal
-                });
+                Columns.Add(enumVal);
             }
 
 

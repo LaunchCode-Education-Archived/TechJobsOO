@@ -1,11 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TechJobs.Models;
+using TechJobs.Data;
 using TechJobs.ViewModels;
 
 namespace TechJobs.Controllers
 {
     public class JobController : Controller
     {
+
+        // Our reference to the data store
+        private static JobData jobData;
+
+        static JobController()
+        {
+            jobData = JobData.GetInstance();
+        }
+
         // The detail display for a given Job at URLs like /Job?id=17
         public IActionResult Index(int id)
         {
