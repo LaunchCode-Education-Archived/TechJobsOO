@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TechJobs.Data;
 using TechJobs.Models;
 
 namespace TechJobs.ViewModels
@@ -33,7 +34,10 @@ namespace TechJobs.ViewModels
 
         public NewJobViewModel()
         {
-            foreach (JobField field in JobData.FindAll(JobFieldType.Employer))
+
+            JobData jobData = JobData.GetInstance();
+
+            foreach (Employer field in jobData.Employers.ToList())
             {
                 Employers.Add(new SelectListItem {
                     Value = field.ID.ToString(),
@@ -41,7 +45,7 @@ namespace TechJobs.ViewModels
                 });
             }
 
-            foreach (JobField field in JobData.FindAll(JobFieldType.Location))
+            foreach (Location field in jobData.Locations.ToList())
             {
                 Locations.Add(new SelectListItem
                 {
@@ -50,7 +54,7 @@ namespace TechJobs.ViewModels
                 });
             }
 
-            foreach (JobField field in JobData.FindAll(JobFieldType.CoreCompetency))
+            foreach (CoreCompetency field in jobData.CoreCompetencies.ToList())
             {
                 CoreCompetencies.Add(new SelectListItem
                 {
@@ -59,7 +63,7 @@ namespace TechJobs.ViewModels
                 });
             }
 
-            foreach (JobField field in JobData.FindAll(JobFieldType.PositionType))
+            foreach (PositionType field in jobData.PositionTypes.ToList())
             {
                 PositionTypes.Add(new SelectListItem
                 {

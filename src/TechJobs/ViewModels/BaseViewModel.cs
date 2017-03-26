@@ -6,21 +6,17 @@ namespace TechJobs.ViewModels
 {
     public class BaseViewModel
     {
-		public List<JobFieldTypeDisplay> Columns { get; set; } 
+		public List<JobFieldType> Columns { get; set; } 
         public string Title { get; set; } = "";
 
         public BaseViewModel()
         {
-            Columns = new List<JobFieldTypeDisplay>();
+            Columns = new List<JobFieldType>();
 
-            foreach (var enumVal in Enum.GetValues(typeof(JobFieldType)))
+            foreach (JobFieldType enumVal in Enum.GetValues(typeof(JobFieldType)))
             {
-                Columns.Add(new JobFieldTypeDisplay {
-                    Type = (JobFieldType) enumVal
-                });
+                Columns.Add(enumVal);
             }
-
-            
         }
     }
 }
