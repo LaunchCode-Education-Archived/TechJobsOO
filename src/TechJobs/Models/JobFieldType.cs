@@ -5,20 +5,12 @@ namespace TechJobs.Models
     public enum JobFieldType
     {
         // Enum representing the JobField properties of a Job
-        // that can be viewed and searched. 
-        //
-        // The DisplayName attributes are for provided for 
-        // potential use in a view.
+        // that can be viewed and searched.
 
         Employer,
         Location,
-
-        [Display(Name = "Skill")]
         CoreCompetency,
-
-        [Display(Name = "Position Type")]
         PositionType,
-
         All
     }
 }
