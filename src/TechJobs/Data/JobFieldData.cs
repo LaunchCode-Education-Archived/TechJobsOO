@@ -11,7 +11,7 @@ namespace TechJobs.Data
 
         private List<TField> allFields = new List<TField>();
 
-        public void Add(TField field)
+        private void Add(TField field)
         {
             allFields.Add(field);
         }
@@ -30,7 +30,7 @@ namespace TechJobs.Data
             return results.Single();
         }
 
-        public TField AddUnique(string fieldValue)
+        internal TField AddUnique(string fieldValue)
         {
 
             var results = from field in allFields
