@@ -3,6 +3,7 @@ using TechJobs.Models;
 using TechJobs.Data;
 using TechJobs.ViewModels;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TechJobs.Controllers
 {
@@ -39,7 +40,27 @@ namespace TechJobs.Controllers
             else
             {
                 JobFieldsViewModel jobFieldsViewModel = new JobFieldsViewModel();
-                jobFieldsViewModel.Fields = jobData.Employers.ToList().Cast<JobField>();
+
+                IEnumerable<JobField> fields;
+
+                switch (column)
+                {
+                    case JobFieldType.Employer:
+                        fields = jobData.Employers.ToList().Cast<JobField>();
+                        break;
+                    case JobFieldType.Location:
+                        fields = jobData.Locations.ToList().Cast<JobField>();
+                        break;
+                    case JobFieldType.CoreCompetency:
+                        fields = jobData.CoreCompetencies.ToList().Cast<JobField>();
+                        break;
+                    case JobFieldType.PositionType:
+                    default:
+                        fields = jobData.PositionTypes.ToList().Cast<JobField>();
+                        break;
+                }
+
+                jobFieldsViewModel.Fields = fields;
                 jobFieldsViewModel.Title =  "All " + column + " Values";
                 jobFieldsViewModel.Column = column;
 
