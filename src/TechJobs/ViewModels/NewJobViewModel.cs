@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TechJobs.Data;
 using TechJobs.Models;
 
 namespace TechJobs.ViewModels
@@ -24,7 +25,10 @@ namespace TechJobs.ViewModels
 
         public NewJobViewModel()
         {
-            foreach (JobField field in JobData.FindAll(JobFieldType.Employer))
+
+            JobData jobData = JobData.GetInstance();
+
+            foreach (Employer field in jobData.Employers.ToList())
             {
                 Employers.Add(new SelectListItem {
                     Value = field.ID.ToString(),

@@ -2,11 +2,7 @@
 {
     public class JobField
     {
-        private int id;
-        public int ID {
-            get { return id; }
-            private set { id = value; }
-        }
+        public int ID { get; set; }
         private static int nextId = 1;
 
         public string Value { get; set; }
@@ -15,6 +11,11 @@
         {
             ID = nextId;
             nextId++;
+        }
+
+        public JobField(string value) : this()
+        {
+            Value = value;
         }
 
         // Provide a basic case-insensitive search
