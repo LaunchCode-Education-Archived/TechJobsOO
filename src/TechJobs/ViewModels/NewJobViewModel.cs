@@ -16,7 +16,7 @@ namespace TechJobs.ViewModels
         public int EmployerID { get; set; }
 
         // TODO #3 - Included other fields needed to create a job,
-        // with correct valudation attributes and display names.
+        // with correct validation attributes and display names.
 
         public List<SelectListItem> Employers { get; set; } = new List<SelectListItem>();
         public List<SelectListItem> Locations { get; set; } = new List<SelectListItem>();
