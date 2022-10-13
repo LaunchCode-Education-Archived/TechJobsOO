@@ -1,0 +1,16 @@
+This code will help students and newbie coders to understand the Factorial of the number
+
+using System;  
+  public class FactorialExample  
+   {  
+     public static void Main(string[] args)  
+      {  
+       int i,fact=1,number;      
+       Console.Write("Enter any Number: ");      
+       number= int.Parse(Console.ReadLine());     
+       for(i=1;i<=number;i++){      
+        fact=fact*i;      
+       }      
+       Console.Write("Factorial of " +number+" is: "+fact);    
+     }  
+  }  
